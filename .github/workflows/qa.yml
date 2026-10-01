@@ -1,0 +1,112 @@
+# Runs the QA suite when this whole app is the repository (suite lives in ncaa-dynasty-qa/).
+name: NCAA Dynasty QA
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  verify:
+    name: QA (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]  # keep in sync (also ncaa-dynasty-qa/.github/workflows/qa.yml); with "Supported Python versions" in SETUP.md
+    defaults:
+      run:
+        working-directory: ncaa-dynasty-qa
+    env:
+      MIN_COVERAGE: "80"   # minimum % of verify.py lines exercised by the regression suite
+      MIN_MUTATION_SCORE: "100"  # minimum % of verifier mutants the unit suite must detect
+      MIN_RULE_MUTATION_SCORE: "100"  # minimum % of mutants detected for EACH verifier rule
+      MIN_PARITY: "20"
+      MUTATION_GATE: "strict"  # fail if any mutant is unreached, survives, or is ineffective
+      QA_SEED: "0"             # recorded in mutation-results.json for local reproduction     # minimum % of scenarios referenced by at least one regression test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install coverage tool
+        run: python -m pip install coverage
+
+      - name: Restore mutation history
+        uses: actions/cache/restore@v4
+        with:
+          path: ncaa-dynasty-qa/mutation-history.json
+          key: mutation-history-py${{ matrix.python-version }}-${{ github.run_id }}
+          restore-keys: mutation-history-py${{ matrix.python-version }}-
+
+      - name: Run verifier + regression tests (writes job summary)
+        run: python ci_summary.py
+
+      - name: Upload per-mutant results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-results-py${{ matrix.python-version }}
+          path: |
+            ncaa-dynasty-qa/mutation-results.json
+            ncaa-dynasty-qa/mutation-results.validation.txt
+            ncaa-dynasty-qa/mutation-history.json
+          if-no-files-found: warn
+
+      - name: Save mutation history
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ncaa-dynasty-qa/mutation-history.json
+          key: mutation-history-py${{ matrix.python-version }}-${{ github.run_id }}
+
+  # Plays the /game page against verify.py's rules (web/test_game_parity.py) on every
+  # Python version. Separate job so the suite job stays stdlib-only. Results are
+  # uploaded as game-parity-py<version> and shown by the QA dashboard's "Load from GitHub".
+  game-parity:
+    name: Game parity (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]  # keep in sync with the verify job
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: oven-sh/setup-bun@v2
+      - name: Install app
+        run: bun install --frozen-lockfile || bun install
+      - name: Install Playwright
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Start the app
+        run: |
+          nohup bun run dev --port 8080 --host 127.0.0.1 > /tmp/app.log 2>&1 &
+          for i in $(seq 1 90); do curl -sf -o /dev/null http://127.0.0.1:8080/game && exit 0; sleep 2; done
+          cat /tmp/app.log; exit 1
+      - name: Run game vs. rules browser test
+        working-directory: ncaa-dynasty-qa
+        run: python web/test_game_parity.py --url http://127.0.0.1:8080 --out game-parity.json
+      - name: Upload game parity results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-parity-py${{ matrix.python-version }}
+          path: ncaa-dynasty-qa/game-parity.json
+          if-no-files-found: warn
+      - name: Run the rules test suite page
+        if: always()
+        working-directory: ncaa-dynasty-qa
+        run: python web/test_rule_checks.py --url http://127.0.0.1:8080 --out rule-checks.json
+      - name: Upload rules test suite results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rule-checks-py${{ matrix.python-version }}
+          path: ncaa-dynasty-qa/rule-checks.json
+          if-no-files-found: warn
