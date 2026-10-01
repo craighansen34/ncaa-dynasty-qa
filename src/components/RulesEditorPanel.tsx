@@ -6,6 +6,7 @@ import R from "../../ncaa-dynasty-qa/rules.json";
 import { applyRules, RULES_EVENT, setLiveRulesDraft } from "@/lib/dynasty/engine";
 import { RulesPreview } from "@/components/RulesPreview";
 import { EditableRules, type DESCRIBED, saveRules, type Editable } from "@/lib/rules.functions";
+import { hasBackendConfig } from "@/lib/rules-online";
 
 const LEVELS = ["5", "4.5", "4", "3.5", "3", "2.5", "2", "1.5", "1", "0.5"];
 const pick = (): Editable => JSON.parse(JSON.stringify({
@@ -61,6 +62,7 @@ export function RulesEditorPanel({ live = false }: { live?: boolean }) {
   }, []);
   const [email, setEmail] = useState<string | null | undefined>(undefined);
   useEffect(() => {
+    if (!hasBackendConfig()) { setEmail(null); return; }
     void supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
     const { data } = supabase.auth.onAuthStateChange((_e, sess) => setEmail(sess?.user?.email ?? null));
     return () => data.subscription.unsubscribe();

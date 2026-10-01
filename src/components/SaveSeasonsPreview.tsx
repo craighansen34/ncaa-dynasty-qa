@@ -3,6 +3,7 @@ import R from "../../ncaa-dynasty-qa/rules.json";
 import type { Editable } from "@/lib/rules.functions";
 import type { GameState } from "@/lib/dynasty/engine";
 import { supabase } from "@/integrations/supabase/client";
+import { hasBackendConfig } from "@/lib/rules-online";
 
 // Replays real season results (Play dynasty save, save file, or seasons stored online) through the draft formula.
 const SAVE_KEY = "ncaa-dynasty-game-v1";
@@ -47,6 +48,7 @@ export function SaveSeasonsPreview({ draft }: { draft: Editable }) {
   }
   useEffect(() => {
     try { const raw = localStorage.getItem(SAVE_KEY); if (raw) setLocal(fromSave(JSON.parse(raw))); } catch { /* ignore */ }
+    if (!hasBackendConfig()) return; // offline (e.g. CI): local save only
     supabase.auth.getUser().then(({ data }) => { setUser(data.user?.id ?? null); if (data.user) void loadStored(); });
   }, []);
 

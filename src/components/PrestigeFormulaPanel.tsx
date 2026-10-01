@@ -7,6 +7,7 @@ import { applyRules, RULES_EVENT, setLiveRulesDraft } from "@/lib/dynasty/engine
 import { RulesPreview } from "@/components/RulesPreview";
 import { SaveSeasonsPreview } from "@/components/SaveSeasonsPreview";
 import { EditableRules, saveRules, type Editable } from "@/lib/rules.functions";
+import { hasBackendConfig } from "@/lib/rules-online";
 
 const pick = (): Editable => JSON.parse(JSON.stringify({
   MAX_ROSTER: R.MAX_ROSTER, TRANSFER_DEADLINE_WEEK: R.TRANSFER_DEADLINE_WEEK, SEASON_WEEKS: R.SEASON_WEEKS,
@@ -43,6 +44,7 @@ export function PrestigeFormulaPanel() {
   useEffect(() => {
     const on = () => { const n = pick(); setSaved(n); setR((cur) => (JSON.stringify(cur) === JSON.stringify(saved) ? n : cur)); };
     window.addEventListener(RULES_EVENT, on);
+    if (!hasBackendConfig()) { setEmail(null); return () => window.removeEventListener(RULES_EVENT, on); }
     void supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
     return () => window.removeEventListener(RULES_EVENT, on);
     // eslint-disable-next-line react-hooks/exhaustive-deps
