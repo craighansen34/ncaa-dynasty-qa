@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NCAA Dynasty QA mutation results",
+  "type": "object",
+  "required": ["schema_version", "baseline_ok", "rules", "mutants", "reproduce"],
+  "properties": {
+    "schema_version": {"type": "integer", "enum": [2]},
+    "baseline_ok": {"type": "boolean"},
+    "rules": {"type": "object", "additionalProperties": {
+      "type": "object", "required": ["killed", "total", "score", "survivors"],
+      "properties": {"killed": {"type": "integer"}, "total": {"type": "integer"},
+                     "score": {"type": "number"}, "survivors": {"type": "array", "items": {"type": "string"}}}}},
+    "reproduce": {
+      "type": "object", "required": ["seed", "python", "test_selection", "mutant_selection", "command"],
+      "properties": {"seed": {"type": "integer"}, "python": {"type": "string"},
+                     "test_selection": {"type": "array", "items": {"type": "string"}},
+                     "mutant_selection": {"type": "array", "items": {"type": "string"}},
+                     "command": {"type": "string"}}},
+    "mutants": {"type": "array", "items": {
+      "type": "object",
+      "required": ["rule", "name", "original", "mutated", "effective", "mutated_lines",
+                   "executed_lines", "executed", "killed", "outcome"],
+      "properties": {
+        "rule": {"type": "string"}, "name": {"type": "string"},
+        "original": {"type": "string"}, "mutated": {"type": "string"},
+        "effective": {"type": ["boolean", "null"]},
+        "mutated_lines": {"type": "array", "items": {"type": "integer"}},
+        "executed_lines": {"type": "array", "items": {"type": "integer"}},
+        "executed": {"type": "boolean"}, "killed": {"type": "boolean"},
+        "outcome": {"type": "string", "enum": ["killed", "survived", "unreached", "ineffective", "target_not_found"]}}}}
+  }
+}

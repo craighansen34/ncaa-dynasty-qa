@@ -1,0 +1,19 @@
+# Roadmap
+- [x] Add advisor-generated tests for new deliberate verifier breaks (per rule) and register the breaks as mutants
+- [x] Document MIN_PARITY / MIN_COVERAGE / MIN_MUTATION_SCORE / MIN_RULE_MUTATION_SCORE (defaults, formats, example CI config) in SETUP.md
+- [x] End-to-end CI tests: malformed thresholds and surviving mutations -> expected exit codes + actionable details
+- [x] Validate every mutation target changes the verifier and mutated code is executed (no skipped/ineffective mutants)
+- [x] End-to-end tests for per-rule mutation thresholds: valid overrides, defaults, actionable failures
+- [x] Per-mutant machine-readable CI artifact (effectiveness, executed-line evidence, outcome)
+- [x] Regression tests: AST-changing behaviour-preserving mutants; lines reached only by unrelated tests
+- [x] Season rollover: archive records, advance players, reset season state (TR-59..TR-61)
+- [x] JSON Schema for mutation-results.json + CI validation
+- [x] Season rollover e2e + edge-case tests (empty, eligibility limits, interrupted)
+- [x] Transactional, idempotent rollover
+- [x] Strict mutation gate + per-rule summary in job log
+- [x] Seed, test selection, Python version in artifact
+- [x] CI mutation history report with per-rule regressions
+- [x] Season-rollover audit log
+- [x] E2E: artifact + validation diagnostics retained when strict gate fails
+- [x] TR-62..TR-72: roster-move deadline, injuries, dynasty prestige + regression tests
+- [x] Real-world mutants for orphaned-rule, orphaned-scenario, scenario-execution + advisor presets and generated tests

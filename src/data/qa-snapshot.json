@@ -1,0 +1,188 @@
+{
+ "generated_at": "2026-09-30T00:41:14.231521+00:00",
+ "results": null,
+ "history": [],
+ "audit_log": [
+  {
+   "season_id": 1,
+   "archived_record": {
+    "season": 1,
+    "wins": 11,
+    "losses": 1,
+    "games_played": 12
+   },
+   "completed_at": "2026-09-30T00:41:14.231650+00:00",
+   "transitions": [
+    {
+     "player": "P1",
+     "from_year": 1,
+     "to_year": 2,
+     "action": "advanced"
+    },
+    {
+     "player": "P2",
+     "from_year": 1,
+     "to_year": 2,
+     "action": "advanced"
+    },
+    {
+     "player": "P3",
+     "from_year": 2,
+     "to_year": 3,
+     "action": "advanced"
+    },
+    {
+     "player": "P4",
+     "from_year": 3,
+     "to_year": 4,
+     "action": "advanced"
+    },
+    {
+     "player": "P5",
+     "from_year": 4,
+     "to_year": 4,
+     "action": "redshirt_hold"
+    },
+    {
+     "player": "P6",
+     "from_year": 4,
+     "to_year": null,
+     "action": "graduated"
+    }
+   ]
+  },
+  {
+   "season_id": 2,
+   "archived_record": {
+    "season": 2,
+    "wins": 7,
+    "losses": 5,
+    "games_played": 12
+   },
+   "completed_at": "2026-09-30T00:41:14.231691+00:00",
+   "transitions": [
+    {
+     "player": "Frosh2",
+     "from_year": 1,
+     "to_year": 2,
+     "action": "advanced"
+    },
+    {
+     "player": "P1",
+     "from_year": 2,
+     "to_year": 3,
+     "action": "advanced"
+    },
+    {
+     "player": "P2",
+     "from_year": 2,
+     "to_year": 3,
+     "action": "advanced"
+    },
+    {
+     "player": "P3",
+     "from_year": 3,
+     "to_year": 4,
+     "action": "advanced"
+    },
+    {
+     "player": "P4",
+     "from_year": 4,
+     "to_year": null,
+     "action": "graduated"
+    },
+    {
+     "player": "P5",
+     "from_year": 4,
+     "to_year": null,
+     "action": "graduated"
+    }
+   ]
+  },
+  {
+   "season_id": 3,
+   "archived_record": {
+    "season": 3,
+    "wins": 3,
+    "losses": 9,
+    "games_played": 12
+   },
+   "completed_at": "2026-09-30T00:41:14.231722+00:00",
+   "transitions": [
+    {
+     "player": "Frosh2",
+     "from_year": 2,
+     "to_year": 3,
+     "action": "advanced"
+    },
+    {
+     "player": "Frosh3",
+     "from_year": 1,
+     "to_year": 2,
+     "action": "advanced"
+    },
+    {
+     "player": "P1",
+     "from_year": 3,
+     "to_year": 4,
+     "action": "advanced"
+    },
+    {
+     "player": "P2",
+     "from_year": 3,
+     "to_year": 4,
+     "action": "advanced"
+    },
+    {
+     "player": "P3",
+     "from_year": 4,
+     "to_year": null,
+     "action": "graduated"
+    }
+   ]
+  },
+  {
+   "season_id": 4,
+   "archived_record": {
+    "season": 4,
+    "wins": 10,
+    "losses": 2,
+    "games_played": 12
+   },
+   "completed_at": "2026-09-30T00:41:14.231751+00:00",
+   "transitions": [
+    {
+     "player": "Frosh2",
+     "from_year": 3,
+     "to_year": 4,
+     "action": "advanced"
+    },
+    {
+     "player": "Frosh3",
+     "from_year": 2,
+     "to_year": 3,
+     "action": "advanced"
+    },
+    {
+     "player": "Frosh4",
+     "from_year": 1,
+     "to_year": 2,
+     "action": "advanced"
+    },
+    {
+     "player": "P1",
+     "from_year": 4,
+     "to_year": null,
+     "action": "graduated"
+    },
+    {
+     "player": "P2",
+     "from_year": 4,
+     "to_year": null,
+     "action": "graduated"
+    }
+   ]
+  }
+ ],
+ "audit_log_source": "demo four-season dynasty played through Roster.rollover_season"
+}

@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790723104423,
+      "tag": "0000_rules_config",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790767835717,
+      "tag": "0001_dynasty_seasons",
+      "breakpoints": true
+    }
+  ]
+}
